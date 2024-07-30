@@ -1,0 +1,32 @@
+name: Update requirements.txt
+
+on:
+  push:
+    paths:
+      - 'poetry.lock'
+  workflow_dispatch: {}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: 'Setup Python'
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      - name: 'Install poetry'
+        run: |
+          python -m pip install -U pip
+          pip install poetry
+          poetry self add poetry-plugin-export
+      - name: 'Export'
+        run: poetry export -f requirements.txt -o requirements.txt
+      - name: Commit changes
+        uses: EndBug/add-and-commit@v9
+        with:
+          add: 'requirements.txt'
+          message: 'Update requirements.txt'
+          default_author: github_actions
+          push: true

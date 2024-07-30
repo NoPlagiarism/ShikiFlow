@@ -1,0 +1,32 @@
+body:
+  - type: dropdown
+    attributes:
+      name: default_media_type
+      label: Default Type
+      description: Default type of media
+      defaultValue: Anime
+      options:
+        - Anime
+        - Manga
+        - Both
+  - type: dropdown
+    attributes:
+      name: preferable_name
+      label: Preferable name
+      description: Preferable language for title
+      defaultValue: English
+      options:
+        - Russian
+        - Licensed Russian
+        - English
+        - Japanese
+  - type: dropdown
+    attributes:
+      name: limit
+      label: Results limit
+      defaultValue: 20
+      options:
+        - 10
+        - 20
+        - 30
+        - 40
