@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "flowshiki"
-version = "0.0.1a"
+version = "0.0.1"
 description = "Flow Launcher plugin to search through Shikimori"
 authors = ["NoPlagiarism <37241775+NoPlagiarism@users.noreply.github.com>"]
 license = "MIT"
