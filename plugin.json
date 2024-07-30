@@ -4,8 +4,9 @@
     "Name": "FlowShiki",
     "Description": "Search anime/manga on Shikimori with Flow (Launcher)",
     "Author": "NoPlagiarism",
-    "Version": "0.0.1",
+    "Version": "0.0.2",
     "Language": "python",
     "ExecuteFileName": "main.py",
-    "IcoPath": "Artworks/logo128.png"
+    "IcoPath": "Artworks/logo128.png",
+    "Website": "https://github.com/NoPlagiarism/FlowShiki"
 }

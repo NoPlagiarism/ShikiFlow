@@ -241,7 +241,7 @@ class ResultConstructor:
                 results.append(
                     Result(
                         Title=ext.name,
-                        SubTitle=f"Открыть на {URL(search_url).host}",
+                        SubTitle=f"Искать на {URL(search_url).host}",
                         IcoPath=self.fav_man.get_fav_path(search_url) or BROWSER,
                         JsonRPCAction=api.open_url(search_url)
                     )

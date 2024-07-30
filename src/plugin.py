@@ -103,13 +103,13 @@ def query(query: str) -> ResultResponse:
             if not search_tags.get_ids():
                 raise ValueError("No ids found")
         except Exception as e:
-            return send_results([Result(Title="Enter valid ids", SubTitle="Readme is planned", IcoPath=FS_ICO_PATH)])
+            return send_results([Result(Title="Enter valid ids", SubTitle="Readme is planned", IcoPath=FS_ICO_PATH)], JsonRPCAction=api.open_url("https://github.com/NoPlagiarism/FlowShiki"))
     if search_tags.show_settings_menu:
         return OSettingsMenu.query(query)
     """ MEDIA ENTRIES """
     if len(query) <= 2:
         return send_results([
-            Result(Title="Enter your query", SubTitle="Readme is planned", IcoPath=FS_ICO_PATH, Score=10),
+            Result(Title="Enter your query", SubTitle="Readme is planned", IcoPath=FS_ICO_PATH, Score=10, JsonRPCAction=api.open_url("https://github.com/NoPlagiarism/FlowShiki")),
             Result(Title="m:", SubTitle="Search Manga", IcoPath=FS_ICO_PATH),
             Result(Title="a:", SubTitle="Search Anime", IcoPath=FS_ICO_PATH),
             Result(Title="b:", SubTitle="Search Both", IcoPath=FS_ICO_PATH)
