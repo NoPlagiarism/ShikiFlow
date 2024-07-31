@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ShikiFlow"
-version = "0.0.2"
+version = "1.0.0"
 description = "Flow Launcher plugin to search through Shikimori"
 authors = ["NoPlagiarism <37241775+NoPlagiarism@users.noreply.github.com>"]
 license = "MIT"
