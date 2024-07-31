@@ -142,7 +142,7 @@ class OSettingsMenu:
                 ),
                 Result(
                     Title="s:exts",
-                    SubTitle="Поиск на сайтах" if self.lang == 'ru' else "External Search",
+                    SubTitle="Внешний поиск" if self.lang == 'ru' else "External Search",
                     IcoPath=FS_ICO_PATH
                 ),
                 Result(
