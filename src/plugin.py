@@ -20,6 +20,8 @@ plugin = Plugin()
 
 client = SearchQLClient("FlowShiki")
 result_constructor = ResultConstructor(settings=plugin.settings)
+lang = plugin.settings['language'][:2].lower()
+osettings = OSettingsMenu(lang=lang)
 
 
 class SearchTags:
@@ -103,16 +105,16 @@ def query(query: str) -> ResultResponse:
             if not search_tags.get_ids():
                 raise ValueError("No ids found")
         except Exception as e:
-            return send_results([Result(Title="Enter valid ids", SubTitle="Readme is planned", IcoPath=FS_ICO_PATH)], JsonRPCAction=api.open_url("https://github.com/NoPlagiarism/FlowShiki"))
+            return send_results([Result(Title="Введите правильные ID" if lang == 'ru' else "Enter valid ids", SubTitle="ReadMe планируется" if lang == 'ru' else "ReadMe is planned", IcoPath=FS_ICO_PATH)], JsonRPCAction=api.open_url("https://github.com/NoPlagiarism/FlowShiki"))
     if search_tags.show_settings_menu:
-        return OSettingsMenu.query(query)
+        return osettings.query(query)
     """ MEDIA ENTRIES """
     if len(query) <= 2:
         return send_results([
-            Result(Title="Enter your query", SubTitle="Readme is planned", IcoPath=FS_ICO_PATH, Score=10, JsonRPCAction=api.open_url("https://github.com/NoPlagiarism/FlowShiki")),
-            Result(Title="m:", SubTitle="Search Manga", IcoPath=FS_ICO_PATH),
-            Result(Title="a:", SubTitle="Search Anime", IcoPath=FS_ICO_PATH),
-            Result(Title="b:", SubTitle="Search Both", IcoPath=FS_ICO_PATH)
+            Result(Title="Введите запрос" if lang == 'ru' else "Enter your query", SubTitle="ReadMe планируется" if lang == 'ru' else "ReadMe is planned", IcoPath=FS_ICO_PATH, Score=10, JsonRPCAction=api.open_url("https://github.com/NoPlagiarism/FlowShiki")),
+            Result(Title="m:", SubTitle="Искать Мангу" if lang == 'ru' else "Search Manga", IcoPath=FS_ICO_PATH),
+            Result(Title="a:", SubTitle="Искать Аниме" if lang == 'ru' else "Search Anime", IcoPath=FS_ICO_PATH),
+            Result(Title="b:", SubTitle="Искать Всё" if lang == 'ru' else "Search Both", IcoPath=FS_ICO_PATH)
         ])
     if search_tags.get_media_type() is not None:
         current_search_type = search_tags.get_media_type()
@@ -129,13 +131,13 @@ def query(query: str) -> ResultResponse:
         data = client.search_by_query(query=query, limit=int(plugin.settings.get("limit", "10")), media_type=current_search_type)
     if not data:
         return send_results([Result(
-            Title="No results",
+            Title="Нет результатов" if lang == 'ru' else "No results",
             IcoPath=FS_ICO_PATH
         )])
     results = list(result_constructor.result_generator(data))
     if not results:
         return send_results([Result(
-            Title="No results",
+            Title="Нет результатов" if lang == 'ru' else "No results",
             IcoPath=FS_ICO_PATH
         )])
     return send_results(results=results)
@@ -146,7 +148,7 @@ def context_menu(context_data):
     
     if isinstance(context_data, dict):
         if context_data.get("type_", "") == "OSettings":
-            return OSettingsMenu.context_menu(context_data)
+            return osettings.context_menu(context_data)
         """ MEDIA ENTRIES """
         if context_data.get("type_", "").lower() in ("anime", "manga"):
             return send_results(result_constructor.make_context_menu(context_data))

@@ -108,9 +108,12 @@ class ResultConstructor:
         }
     }
     
-    def __init__(self, settings: SETTINGS_TYPE, lang: t.Literal['ru', 'en'] = 'ru'):
-        self.lang = lang
+    def __init__(self, settings: SETTINGS_TYPE, lang: t.Optional[t.Literal['ru', 'en']] = None):
         self.settings = settings
+        if lang:
+            self.lang = lang
+        else:
+            self.lang = self.settings['language'][:2].lower()
         
         self.fav_man = FaviconManager([FAVICON_FOLDER_CUSTOM, FAVICON_FOLDER_ROOT])
 
@@ -174,8 +177,8 @@ class ResultConstructor:
         url = self.find_any_link(anime)
         result = Result(
             Title=self.get_preferable_title_from_chosen(anime),
-            SubTitle=f"Тип: {self.ANIME_KINDS[self.lang][anime.kind]} | Статус: {self.ANIME_STATUSES[self.lang][anime.status]}\n"\
-                f"Эпизодов: {episodes}" + (f" | Сезон: {self.from_season_string_with_current(anime.season)}" if anime.season else ""),
+            SubTitle=f"{ {'ru': 'Тип', 'en': 'Format'}[self.lang]}: {self.ANIME_KINDS[self.lang][anime.kind]} | { {'ru': 'Статус', 'en': 'Status'}[self.lang] }: {self.ANIME_STATUSES[self.lang][anime.status]}\n"\
+                f"{ {'ru': 'Эпизодов', 'en': 'Episodes'}[self.lang] }: {episodes}" + (f" | { {'ru': 'Сезон', 'en': 'Season' }[self.lang] }: {self.from_season_string_with_current(anime.season)}" if anime.season else ""),
             IcoPath=anime.icon_url,
             ContextData=anime.raw_dict,
             JsonRPCAction=api.open_url(url) if url else api.copy_to_clipboard(self.get_preferable_title_from_chosen(anime))
@@ -185,13 +188,13 @@ class ResultConstructor:
     def make_result_from_manga(self, manga: MangaEntry):
         ch_vol = "\n"
         if manga.chapters:
-            ch_vol = ch_vol + f"Глав: {manga.chapters}"
+            ch_vol = ch_vol + f"{ {'ru': 'Глав', 'en': 'Chapters:' }[self.lang] }: {manga.chapters}"
         if manga.volumes:
-            ch_vol = ch_vol + f" | Томов: {manga.volumes}"
+            ch_vol = ch_vol + f" | { {'ru': 'Томов', 'en': 'Volumes' }[self.lang] }: {manga.volumes}"
         url = self.find_any_link(manga)
         result = Result(
             Title=self.get_preferable_title_from_chosen(manga),
-            SubTitle=f"Тип: {self.MANGA_KINDS[self.lang][manga.kind]} | Статус: {self.MANGA_STATUSES[self.lang][manga.status]}" +  ch_vol,
+            SubTitle=f"{ {'ru': 'Тип', 'en': 'Format'}[self.lang]}: {self.MANGA_KINDS[self.lang][manga.kind]} | { {'ru': 'Статус', 'en': 'Status'}[self.lang] }: {self.MANGA_STATUSES[self.lang][manga.status]}" +  ch_vol,
             IcoPath=manga.icon_url,
             ContextData=manga.raw_dict,
             JsonRPCAction=api.open_url(url) if url else api.copy_to_clipboard(self.get_preferable_title_from_chosen(manga))
@@ -207,14 +210,14 @@ class ResultConstructor:
         url = self.find_any_link(media)
         if url:
             results.append(Result(
-                Title="Скопировать ссылку",
-                SubTitle="на Shikimori" if not media.is_censored else "на {0} (Цензура)".format(str(URL(url).host)),
+                Title="Скопировать ссылку" if self.lang == 'ru' else "Copy link",
+                SubTitle=f"{ {'ru': 'на', 'en': 'on'}[self.lang] } Shikimori" if not media.is_censored else "на {0} (Цензура)".format(str(URL(url).host)),
                 IcoPath=COPYLINK,
                 JsonRPCAction=api.copy_to_clipboard(url)
             ))
         else:
             results.append(Result(
-                Title="URL не найден",
+                Title="URL не найден" if self.lang == 'ru' else "URL not found",
                 SubTitle=":<",
                 IcoPath=FS_ICO_PATH
             ))
@@ -225,7 +228,7 @@ class ResultConstructor:
                     continue
                 results.append(Result(
                     Title=media.EXT_LINKS_NAMES[ext],
-                    SubTitle=f"Открыть на {URL(url_ext).host}",
+                    SubTitle=f"Открыть на {URL(url_ext).host}" if self.lang == 'ru' else f"Open on {URL(url_ext).host}",
                     IcoPath=self.fav_man.get_fav_path(url_ext) or BROWSER,
                     JsonRPCAction=api.open_url(url_ext)
                 ))
@@ -241,7 +244,7 @@ class ResultConstructor:
                 results.append(
                     Result(
                         Title=ext.name,
-                        SubTitle=f"Искать на {URL(search_url).host}",
+                        SubTitle=f"Искать на {URL(search_url).host}" if self.lang == 'ru' else f"Search on {URL(search_url).host}",
                         IcoPath=self.fav_man.get_fav_path(search_url) or BROWSER,
                         JsonRPCAction=api.open_url(search_url)
                     )
@@ -258,14 +261,14 @@ class ResultConstructor:
         if media.russian:
             results.append(Result(
                 Title=media.russian,
-                SubTitle="Название на русском",
+                SubTitle="Название на русском" if self.lang == 'ru' else "Russian title",
                 IcoPath=FS_ICO_PATH,
                 JsonRPCAction=api.copy_to_clipboard(media.russian)
             ))
         if media.english:
             results.append(Result(
                 Title=media.english,
-                SubTitle="Название на английском",
+                SubTitle="Название на английском" if self.lang == 'ru' else "English title",
                 IcoPath=FS_ICO_PATH,
                 JsonRPCAction=api.copy_to_clipboard(media.english)
             ))
@@ -273,7 +276,7 @@ class ResultConstructor:
             for s in media.synonyms[:3]:
                 results.append(Result(
                     Title=s,
-                    SubTitle="Альтернативное название",
+                    SubTitle="Альтернативное название" if self.lang == 'ru' else "Alternative title",
                     IcoPath=FS_ICO_PATH,
                     JsonRPCAction=api.copy_to_clipboard(s)
                 ))
@@ -281,14 +284,14 @@ class ResultConstructor:
             licensors = f"({', '.join(media.licensors)})" if media.licensors else ""
             results.append(Result(
                 Title=media.license_name_ru,
-                SubTitle=f"Лицензированное название {licensors}",
+                SubTitle=f"Лицензированное название {licensors}" if self.lang == 'ru' else f"Ru licensed title {licensors}",
                 IcoPath=FS_ICO_PATH,
                 JsonRPCAction=api.copy_to_clipboard(media.license_name_ru)
             ))
         if media.japanese:
             results.append(Result(
                 Title=media.japanese,
-                SubTitle="Название на японском",
+                SubTitle="Название на японском" if self.lang == 'ru' else "Japanese title",
                 IcoPath=FS_ICO_PATH,
                 JsonRPCAction=api.copy_to_clipboard(media.japanese)
             ))

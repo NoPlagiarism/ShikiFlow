@@ -12,7 +12,8 @@ FS_ICO_PATH = os.path.join(ROOT_PATH, "Artworks", "logo128.png")
 SETTINGS_TYPE = t.TypedDict('Settings', {
 	'default_media_type': t.Literal["Anime", "Manga", "Both"],
 	'preferable_name': t.Literal["Russian", "Licensed Russian", "English", "Japanese"],
-	'limit': str
+	'limit': str,
+	'language': t.Literal['Russian', 'English']
 })
 
 FLOW_PROGRAM_DIRECTORY = os.environ.get("FLOW_PROGRAM_DIRECTORY")

@@ -10,6 +10,8 @@ from .shared import FS_ICO_PATH, PLUGIN_ID, PLUGIN_SETTINGS_DIRECTORY, FAVICON_F
 from .favicon import FaviconManager
 from .shiki.types import MediaEntry
 
+import typing as t
+
 
 class FalseMatchData:
     matched = True
@@ -18,6 +20,9 @@ class FalseMatchData:
 
 class OSettingsMenu:
     fav_man = FaviconManager([FAVICON_FOLDER_CUSTOM, FAVICON_FOLDER_ROOT])
+    
+    def __init__(self, lang: t.Literal['ru', 'en'] = 'ru'):
+        self.lang = lang
     
     @classmethod
     def external_links(cls, query: str):
@@ -40,15 +45,14 @@ class OSettingsMenu:
         
         return send_results(results=results)
     
-    @classmethod
-    def external_link_context(cls, context_data: dict):
+    def external_link_context(self, context_data: dict):
         # XXX: Maybe can be simplified with JsonRPC V2 or using shell?
         if context_data['ext_link'] in osettings.external_links:
             osettings.del_external_link(context_data['ext_link'])
-            result_str = f"{MediaEntry.EXT_LINKS_NAMES[context_data['ext_link']]} удалён из меню"
+            result_str = f"{MediaEntry.EXT_LINKS_NAMES[context_data['ext_link']]} " + "удалён из меню" if self.lang == 'ru' else "deleted from menu"
         else:
             osettings.add_external_link(context_data['ext_link'])
-            result_str = f"{MediaEntry.EXT_LINKS_NAMES[context_data['ext_link']]} добавлен в меню"
+            result_str = f"{MediaEntry.EXT_LINKS_NAMES[context_data['ext_link']]} " + "добавлен в меню" if self.lang == 'ru' else "added to menu"
         osettings.save()
         return send_results(results=[Result(Title=result_str, IcoPath=FS_ICO_PATH)])
     
@@ -64,14 +68,13 @@ class OSettingsMenu:
             ))
         return send_results(results=res)
     
-    @classmethod
-    def external_search_delete_context(cls, context_data: dict):
+    def external_search_delete_context(self, context_data: dict):
         # XXX: Maybe can be simplified with JsonRPC V2 or using shell?
         ext = ExtSearch(**context_data["exts_delete"])
         osettings.del_external_search(ext)
         osettings.save()
         return send_results(results=[Result(
-            Title=f"{ext.name} удалён из меню",
+            Title=f"{ext.name} " + "удалён из меню" if self.lang == 'ru' else "deleted from menu",
             IcoPath=FS_ICO_PATH
         )])
     
@@ -96,53 +99,50 @@ class OSettingsMenu:
             ))
         return send_results(results=res)
     
-    @classmethod
-    def external_search_export_context(cls, context_data):
+    def external_search_export_context(self, context_data):
         # XXX: Maybe can be simplified with JsonRPC V2 or using shell?
         exts = ExtSearch(**context_data["exts_add"])
         osettings.add_external_search(exts)
         osettings.save()
         return send_results(results=[Result(
-            Title=f"{exts.name} добавлен в меню",
+            Title=f"{exts.name} " + "добавлен в меню" if self.lang == 'ru' else "added to menu",
             IcoPath=FS_ICO_PATH
         )])
     
-    @classmethod
-    def external_search_index(cls, query: str):
+    def external_search_index(self, query: str):
         if query.startswith("d") or query.startswith(":d"):
-            return cls.external_search_delete()
+            return self.external_search_delete()
         if query.startswith("e") or query.startswith(":e"):
-            return cls.external_search_export(query=query[1:] if query[0] == "e" else query[2:])
+            return self.external_search_export(query=query[1:] if query[0] == "e" else query[2:])
         else:
             return send_results(results=[
                 Result(
                     Title="s:exts e",
-                    SubTitle="Add External Link from Available",
+                    SubTitle="Найти сайт из списка" if self.lang == 'ru' else "Add External Search from Available",
                     IcoPath=FS_ICO_PATH
                 ),
                 Result(
                     Title="s:exts d",
-                    SubTitle="Delete External Links",
+                    SubTitle="Удалить внешний поиск" if self.lang == 'ru' else "Delete External Search",
                     IcoPath=FS_ICO_PATH
                 )
             ])
     
-    @classmethod
-    def query(cls, query: str):
+    def query(self, query: str):
         if query.startswith("extl"):
-            return cls.external_links(query[4:].strip())
+            return self.external_links(query[4:].strip())
         elif query.startswith("exts"):
-            return cls.external_search_index(query[4:].strip())
+            return self.external_search_index(query[4:].strip())
         else:
             return send_results(results=[
                 Result(
                     Title="s:extl",
-                    SubTitle="External Links",
+                    SubTitle="Внешние ссылки" if self.lang == 'ru' else "External Links",
                     IcoPath=FS_ICO_PATH
                 ),
                 Result(
                     Title="s:exts",
-                    SubTitle="External Search",
+                    SubTitle="Поиск на сайтах" if self.lang == 'ru' else "External Search",
                     IcoPath=FS_ICO_PATH
                 ),
                 Result(
@@ -160,11 +160,10 @@ class OSettingsMenu:
                 # )
             ])
     
-    @classmethod
-    def context_menu(cls, context_data: dict):
+    def context_menu(self, context_data: dict):
         if "ext_link" in context_data:
-            return cls.external_link_context(context_data)
+            return self.external_link_context(context_data)
         elif "exts_delete" in context_data:
-            return cls.external_search_delete_context(context_data)
+            return self.external_search_delete_context(context_data)
         elif "exts_add" in context_data:
-            return cls.external_search_export_context(context_data)
+            return self.external_search_export_context(context_data)
