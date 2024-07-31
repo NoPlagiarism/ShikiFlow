@@ -1,5 +1,7 @@
 # ShikiFlow
 
+Russian | [English](ReadMe.md)
+
 > Ищи аниме/мангу в [Shikimori](https://shikimori.one) с ветерком через [Flow Launcher](https://www.flowlauncher.com)
 
 ## Установка
