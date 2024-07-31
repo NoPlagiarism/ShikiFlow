@@ -34,7 +34,7 @@ body:
     attributes:
       name: language
       label: Language
-      defaultValue: Russian
+      defaultValue: English
       options:
         - Russian
         - English
