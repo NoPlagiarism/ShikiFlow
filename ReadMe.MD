@@ -76,7 +76,7 @@ Also, you can try [opening issue in mentioned repo](https://github.com/NoPlagiar
 ### Replace icon of specific website
 
 - Download .png icon
-- Go to plugin settings
+- Go to plugin settings folder
   - Go to `UserData` folder (`Flow Launcher UserData Folder` in Flow Launcher)
   - Go to `Settings\Plugins\ShikiFlow`
 - Save icon in `Favs` folder with "`DOMAIN.png`" name
