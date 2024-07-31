@@ -113,7 +113,7 @@ class ResultConstructor:
         if lang:
             self.lang = lang
         else:
-            self.lang = self.settings['language'][:2].lower()
+            self.lang = self.settings.get('language', 'Russian')[:2].lower()
         
         self.fav_man = FaviconManager([FAVICON_FOLDER_CUSTOM, FAVICON_FOLDER_ROOT])
 

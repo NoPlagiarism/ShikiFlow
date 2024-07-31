@@ -2,6 +2,7 @@
 
 import os
 import re
+import json
 import logging
 
 from pyflowlauncher import Plugin, Result, send_results, api, ResultResponse
@@ -10,7 +11,7 @@ from .osettings_menu import OSettingsMenu
 from .result import ResultConstructor
 from .graphql_queries import GraphQLQueryConstructor
 from .search import SearchQLClient
-from .shared import FS_ICO_PATH, SETTINGS_TYPE
+from .shared import FS_ICO_PATH, SETTINGS_TYPE, SETTINGS_FILE
 
 import typing as t
 
@@ -18,9 +19,17 @@ logger = logging.getLogger(__name__)
 
 plugin = Plugin()
 
+def get_settings():
+    # XXX: JsonRPC V2 will fix it?
+    if plugin.settings:
+        return plugin.settings
+    with open(SETTINGS_FILE, mode="r", encoding="utf-8") as f:
+        return json.load(f)
+
 client = SearchQLClient("ShikiFlow")
-result_constructor = ResultConstructor(settings=plugin.settings)
-lang = plugin.settings['language'][:2].lower()
+settings = get_settings()
+lang = settings['language'][:2].lower()
+result_constructor = ResultConstructor(settings=settings)
 osettings = OSettingsMenu(lang=lang)
 
 
@@ -119,7 +128,7 @@ def query(query: str) -> ResultResponse:
     if search_tags.get_media_type() is not None:
         current_search_type = search_tags.get_media_type()
     else:
-        current_search_type = plugin.settings.get("default_media_type", "Anime")
+        current_search_type = settings.get("default_media_type", "Anime")
     url_matched = re.match(r".*(?P<media_type>animes|mangas)\/(?P<shk_id>\d+).*", query)
     if url_matched:
         media_type_raw = url_matched.group("media_type")
@@ -128,7 +137,7 @@ def query(query: str) -> ResultResponse:
     elif search_tags.search_by_id:
         data = client.search_both_by_ids(ids=search_tags.get_ids())
     else:
-        data = client.search_by_query(query=query, limit=int(plugin.settings.get("limit", "10")), media_type=current_search_type)
+        data = client.search_by_query(query=query, limit=int(settings.get("limit", "10")), media_type=current_search_type)
     if not data:
         return send_results([Result(
             Title="Нет результатов" if lang == 'ru' else "No results",
