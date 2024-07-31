@@ -12,7 +12,7 @@ except ImportError:
 
 # TODO: Change logging level with env or/and allow to fully (dis/en)able logging somewhere?\
 # Standard file handler
-file_handler = TimedRotatingFileHandler("flowshiki.log", when='D', interval=1, backupCount=1, encoding='utf-8')
+file_handler = TimedRotatingFileHandler("shikiflow.log", when='D', interval=1, backupCount=1, encoding='utf-8')
 formatter = logging.Formatter(fmt="%(asctime)s - %(levelname)s - %(name)s - %(message)s")
 file_handler.setFormatter(formatter)
 

@@ -39,7 +39,7 @@ def get_anma_data():
     if check_cache():
         return load_cache()
     
-    resp = httpx.get(ANMA_URL, headers={"User-Agent": "FlowShiki"})
+    resp = httpx.get(ANMA_URL, headers={"User-Agent": "ShikiFlow"})
     data = resp.json()
     
     # Cache

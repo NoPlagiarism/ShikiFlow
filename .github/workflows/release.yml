@@ -19,7 +19,7 @@ jobs:
           python -m pip install -U pip
           pip install -r ./requirements.txt -t ./lib
       - name: 'Zip release'
-        run: zip -r Flow.Launcher.Plugin.FlowShiki.zip . -x '*.git*'
+        run: zip -r Flow.Launcher.Plugin.ShikiFlow.zip . -x '*.git*'
       - name: 'Get Version'
         id: version
         uses: notiz-dev/github-action-json-property@release
@@ -30,7 +30,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         if: success()
         with:
-          files: 'Flow.Launcher.Plugin.FlowShiki.zip'
+          files: 'Flow.Launcher.Plugin.ShikiFlow.zip'
           tag_name: "v${{steps.version.outputs.prop}}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

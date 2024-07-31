@@ -1,12 +1,12 @@
 {
     "ID": "b34023f6440d11ef94540242ac120002",
     "ActionKeyword": "shk",
-    "Name": "FlowShiki",
+    "Name": "ShikiFlow",
     "Description": "Search anime/manga on Shikimori with Flow (Launcher)",
     "Author": "NoPlagiarism",
     "Version": "0.0.2",
     "Language": "python",
     "ExecuteFileName": "main.py",
     "IcoPath": "Artworks/logo128.png",
-    "Website": "https://github.com/NoPlagiarism/FlowShiki"
+    "Website": "https://github.com/NoPlagiarism/ShikiFlow"
 }
