@@ -105,13 +105,13 @@ def query(query: str) -> ResultResponse:
             if not search_tags.get_ids():
                 raise ValueError("No ids found")
         except Exception as e:
-            return send_results([Result(Title="Введите правильные ID" if lang == 'ru' else "Enter valid ids", SubTitle="ReadMe планируется" if lang == 'ru' else "ReadMe is planned", IcoPath=FS_ICO_PATH)], JsonRPCAction=api.open_url("https://github.com/NoPlagiarism/ShikiFlow"))
+            return send_results([Result(Title="Введите правильные ID" if lang == 'ru' else "Enter valid ids", SubTitle="Открыть ReadMe" if lang == 'ru' else "Open ReadMe" if lang == 'ru' else "ReadMe is planned", IcoPath=FS_ICO_PATH)], JsonRPCAction=api.open_url("https://github.com/NoPlagiarism/ShikiFlow"))
     if search_tags.show_settings_menu:
         return osettings.query(query)
     """ MEDIA ENTRIES """
     if len(query) <= 2:
         return send_results([
-            Result(Title="Введите запрос" if lang == 'ru' else "Enter your query", SubTitle="ReadMe планируется" if lang == 'ru' else "ReadMe is planned", IcoPath=FS_ICO_PATH, Score=10, JsonRPCAction=api.open_url("https://github.com/NoPlagiarism/ShikiFlow")),
+            Result(Title="Введите запрос" if lang == 'ru' else "Enter your query", SubTitle="Открыть ReadMe" if lang == 'ru' else "Open ReadMe", IcoPath=FS_ICO_PATH, Score=10, JsonRPCAction=api.open_url("https://github.com/NoPlagiarism/ShikiFlow")),
             Result(Title="m:", SubTitle="Искать Мангу" if lang == 'ru' else "Search Manga", IcoPath=FS_ICO_PATH),
             Result(Title="a:", SubTitle="Искать Аниме" if lang == 'ru' else "Search Anime", IcoPath=FS_ICO_PATH),
             Result(Title="b:", SubTitle="Искать Всё" if lang == 'ru' else "Search Both", IcoPath=FS_ICO_PATH)
