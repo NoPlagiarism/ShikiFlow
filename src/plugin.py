@@ -1,5 +1,3 @@
-# TODO: support localization
-
 import os
 import re
 import json
