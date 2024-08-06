@@ -24,7 +24,7 @@ class GraphQLShikiClient(BaseShikiClient):
     
     def get_data(self, query: str, variables: t.Optional[dict] = None):
         data = self.get_raw_data(query=query, variables=variables)
-        logger.debug(json.dumps(data))
+        logger.debug(json.dumps(data, ensure_ascii=False))
         return self.parse_data(data)
     
     @classmethod
