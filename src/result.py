@@ -177,8 +177,8 @@ class ResultConstructor:
         url = self.find_any_link(anime)
         result = Result(
             Title=self.get_preferable_title_from_chosen(anime),
-            SubTitle=f"{ {'ru': 'Тип', 'en': 'Format'}[self.lang]}: {self.ANIME_KINDS[self.lang][anime.kind]} | { {'ru': 'Статус', 'en': 'Status'}[self.lang] }: {self.ANIME_STATUSES[self.lang][anime.status]}\n"\
-                f"{ {'ru': 'Эпизодов', 'en': 'Episodes'}[self.lang] }: {episodes}" + (f" | { {'ru': 'Сезон', 'en': 'Season' }[self.lang] }: {self.from_season_string_with_current(anime.season)}" if anime.season else ""),
+            SubTitle=f"{ {'ru': 'Тип', 'en': 'Format'}[self.lang]}: {self.ANIME_KINDS[self.lang].get(anime.kind, f'N/A [' + {'ru': 'Аниме', 'en': 'Anime' }[self.lang] + ']')} | { {'ru': 'Статус', 'en': 'Status'}[self.lang] }: {self.ANIME_STATUSES[self.lang].get(anime.status, 'N/A')}\n" +\
+                (f"{ {'ru': 'Эпизодов', 'en': 'Episodes'}[self.lang] }: {episodes}" if anime.episodes else "") + ((f" | { {'ru': 'Сезон', 'en': 'Season' }[self.lang] }: {self.from_season_string_with_current(anime.season)}") if anime.season else ""),
             IcoPath=anime.icon_url,
             ContextData=anime.raw_dict,
             JsonRPCAction=api.open_url(url) if url else api.copy_to_clipboard(self.get_preferable_title_from_chosen(anime))
@@ -194,7 +194,7 @@ class ResultConstructor:
         url = self.find_any_link(manga)
         result = Result(
             Title=self.get_preferable_title_from_chosen(manga),
-            SubTitle=f"{ {'ru': 'Тип', 'en': 'Format'}[self.lang]}: {self.MANGA_KINDS[self.lang][manga.kind]} | { {'ru': 'Статус', 'en': 'Status'}[self.lang] }: {self.MANGA_STATUSES[self.lang][manga.status]}" +  ch_vol,
+            SubTitle=f"{ {'ru': 'Тип', 'en': 'Format'}[self.lang]}: {self.MANGA_KINDS[self.lang].get(manga.kind, f'N/A [' + {'ru': 'Манга', 'en': 'Manga' }[self.lang] + ']')} | { {'ru': 'Статус', 'en': 'Status'}[self.lang] }: {self.MANGA_STATUSES[self.lang].get(manga.status, 'N/A')}" +  ch_vol,
             IcoPath=manga.icon_url,
             ContextData=manga.raw_dict,
             JsonRPCAction=api.open_url(url) if url else api.copy_to_clipboard(self.get_preferable_title_from_chosen(manga))
