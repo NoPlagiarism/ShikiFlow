@@ -83,4 +83,4 @@ Russian | [English](ReadMe.md)
   - Перейти в `Settings\Plugins\ShikiFlow`
 - Сохранить изображение в папке `Favs` с именем "`ДОМЕН.png`"
   - `www.hidive.com` -> `hidive.com.png`
-  - `smotret-anime.com` -> `smotret-anime.com.png`
+  - `smotret-anime.net` -> `smotret-anime.net.png`

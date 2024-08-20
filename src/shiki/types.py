@@ -111,7 +111,7 @@ class MediaEntry:
         "kinopoisk": "https://www.kinopoisk.ru",
         "kage_project": "http://www.world-art.ru/animation",
         "twitter": "https://x.com",
-        "smotret_anime": "https://smotret-anime.com",
+        "smotret_anime": "https://smotret-anime.net",
         "crunchyroll": "https://www.crunchyroll.com",
         "amazon": "https://www.primevideo.com",
         "hidive": "https://www.hidive.com",

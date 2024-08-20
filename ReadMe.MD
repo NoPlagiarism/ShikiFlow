@@ -83,4 +83,4 @@ Also, you can try [opening issue in mentioned repo](https://github.com/NoPlagiar
   - Go to `Settings\Plugins\ShikiFlow`
 - Save icon in `Favs` folder with "`DOMAIN.png`" name
   - `www.hidive.com` -> `hidive.com.png`
-  - `smotret-anime.com` -> `smotret-anime.com.png`
+  - `smotret-anime.net` -> `smotret-anime.net.png`
