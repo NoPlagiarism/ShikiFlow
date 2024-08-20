@@ -10,11 +10,22 @@ import typing as t
 
 logger = logging.getLogger(__name__)
 
+# 2nd level domains where subdomains used
+GLOBAL_DOMAINS = [
+    "wikipedia.org",
+    "slashlib.me",
+    "readmanga.io"
+]
+
 
 class BasicFaviconProvider:    
     @staticmethod
     def simplify_domain(dom: str):
-        return dom[4:] if dom.startswith("www.") else dom
+        res = dom[4:] if dom.startswith("www.") else dom
+        for x in GLOBAL_DOMAINS:
+            if dom.endswith(x):
+                return x
+        return res
     
     @staticmethod
     def get_domain(dom: httpx.URL | str) -> str:
