@@ -118,10 +118,11 @@ def query(query: str) -> ResultResponse:
     """ MEDIA ENTRIES """
     if len(query) <= 2:
         return send_results([
-            Result(Title="Введите запрос" if lang == 'ru' else "Enter your query", SubTitle="Открыть ReadMe" if lang == 'ru' else "Open ReadMe", IcoPath=FS_ICO_PATH, Score=10, JsonRPCAction=api.open_url("https://github.com/NoPlagiarism/ShikiFlow")),
+            Result(Title="Введите запрос" if lang == 'ru' else "Enter your query", SubTitle="Открыть ReadMe (Прочти Меня :>)" if lang == 'ru' else "Open ReadMe", IcoPath=FS_ICO_PATH, Score=10, JsonRPCAction=api.open_url("https://github.com/NoPlagiarism/ShikiFlow")),
             Result(Title="m:", SubTitle="Искать Мангу" if lang == 'ru' else "Search Manga", IcoPath=FS_ICO_PATH),
             Result(Title="a:", SubTitle="Искать Аниме" if lang == 'ru' else "Search Anime", IcoPath=FS_ICO_PATH),
-            Result(Title="b:", SubTitle="Искать Всё" if lang == 'ru' else "Search Both", IcoPath=FS_ICO_PATH)
+            Result(Title="b:", SubTitle="Искать Всё" if lang == 'ru' else "Search Both", IcoPath=FS_ICO_PATH),
+            Result(Title="s:", SubTitle="Дополнительные настройки" if lang == 'ru' else "Additional settings", IcoPath=FS_ICO_PATH)
         ])
     if search_tags.get_media_type() is not None:
         current_search_type = search_tags.get_media_type()
