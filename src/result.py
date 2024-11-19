@@ -297,4 +297,12 @@ class ResultConstructor:
                 JsonRPCAction=api.copy_to_clipboard(media.japanese)
             ))
         
+        # ID
+        results.append(Result(
+            Title="Скопировать ID" if self.lang == 'ru' else "Copy ID",
+            SubTitle=f"Shikimori ID: {media.id_}",
+            IcoPath=FS_ICO_PATH,
+            JsonRPCAction=api.copy_to_clipboard(str(media.id_))
+        ))
+        
         return results
