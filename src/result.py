@@ -212,7 +212,7 @@ class ResultConstructor:
         if url:
             results.append(Result(
                 Title="Скопировать ссылку" if self.lang == 'ru' else "Copy link",
-                SubTitle=f"{ {'ru': 'на', 'en': 'on'}[self.lang] } Shikimori" if not media.is_censored else "на {0} (Цензура)".format(str(URL(url).host)),
+                SubTitle=f"{ {'ru': 'на', 'en': 'on'}[self.lang] } Shikimori" if not media.is_censored else ("на {0} (Цензура)".format(str(URL(url).host)) if self.lang == "ru" else "on {0} (Censored)".format(str(URL(url).host))),
                 IcoPath=COPYLINK,
                 JsonRPCAction=api.copy_to_clipboard(url)
             ))
