@@ -7,7 +7,7 @@ from pyflowlauncher.icons import BROWSER, COPYLINK, APP
 from .shiki.types import MediaEntry, AnimeEntry, MangaEntry,\
     AnimeKindEnum, AnimeStatusEnum, MangaKindEnum, MangaStatusEnum
 from .shiki.graphql import MediaEntryFromGraph
-from .shared import FS_ICO_PATH, SETTINGS_TYPE, change_query, FAVICON_FOLDER_ROOT, FAVICON_FOLDER_CUSTOM
+from .shared import FS_ICO_PATH, SETTINGS_TYPE, FAVICON_FOLDER_ROOT, FAVICON_FOLDER_CUSTOM
 from .osettings import osettings
 from .favicon import FaviconManager
 

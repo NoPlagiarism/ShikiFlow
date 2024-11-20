@@ -24,7 +24,3 @@ PLUGIN_CACHE_FOLDER = os.path.join(PLUGIN_SETTINGS_DIRECTORY, "Cache") if PLUGIN
 
 FAVICON_FOLDER_ROOT = os.path.join(ROOT_PATH, "Favs")
 FAVICON_FOLDER_CUSTOM = os.path.join(PLUGIN_SETTINGS_DIRECTORY, "Favs") if PLUGIN_SETTINGS_DIRECTORY else None
-
-
-def change_query(query: str, requery: bool):
-    return JsonRPCAction(method="Flow.Launcher.ChangeQuery", parameters=[query, requery], dontHideAfterAction=True)
