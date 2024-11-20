@@ -4,7 +4,7 @@
     "Name": "ShikiFlow",
     "Description": "Search anime/manga on Shikimori with Flow (Launcher)",
     "Author": "NoPlagiarism",
-    "Version": "1.0.1",
+    "Version": "1.1.0",
     "Language": "python",
     "ExecuteFileName": "main.py",
     "IcoPath": "Artworks/logo128.png",
