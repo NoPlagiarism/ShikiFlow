@@ -1,8 +1,12 @@
 import os
+from itertools import chain
+import logging
+
+from httpx import URL
 
 from pyflowlauncher import ResultResponse, Result, send_results, api
 from pyflowlauncher.string_matcher import string_matcher, MatchData
-from pyflowlauncher.icons import FOLDER
+from pyflowlauncher.icons import FOLDER, BROWSER
 
 from .anma_data import get_anma_data
 from .osettings import osettings, ExtSearch
@@ -11,6 +15,8 @@ from .favicon import FaviconManager
 from .shiki.types import MediaEntry
 
 import typing as t
+
+logger = logging.getLogger(__name__)
 
 
 class FalseMatchData:
@@ -128,11 +134,56 @@ class OSettingsMenu:
                 )
             ])
     
+    def external_favicons_check(self, query: str):
+        is_all_selected = False
+        if query.startswith("a:"):
+            query = query[2:]
+            is_all_selected = True
+        missing = list()
+        
+        for exts in chain(osettings.external_search, (map(ExtSearch.from_dict, get_anma_data()) if is_all_selected else list())): #type: ExtSearch
+            if isinstance(exts.url, dict):
+                if self.fav_man.get_fav_path(exts.url['Anime']) is None:
+                    missing.append(URL(exts.url['Anime']).host)
+                if self.fav_man.get_fav_path(exts.url['Manga']) is None:
+                    missing.append(URL(exts.url['Manga']).host)
+            else:
+                if self.fav_man.get_fav_path(exts.url) is None:
+                    missing.append(URL(exts.url).host)
+        
+        return send_results(results=[
+            Result(
+                Title=x,
+                IcoPath=FS_ICO_PATH,
+                JsonRPCAction=api.copy_to_clipboard(x),
+                ContextData={"type_": "OSettings", "fav": x}
+            )
+        for x in missing] if missing else [Result(Title="Всё на месте :>" if self.lang == 'ru' else "Seems alright :>", IcoPath=FS_ICO_PATH)])
+    
+    def external_favicons_context(self, context_data: dict):
+        sub_title_string = lambda x: ("Открыть" if self.lang == 'ru' else "Open") + f" {x}"
+        return send_results(results=[
+            Result(
+                Title="Favicon Extractor",
+                SubTitle=sub_title_string("faviconextractor.com"),
+                IcoPath=BROWSER,
+                JsonRPCAction=api.open_url("https://www.faviconextractor.com")
+            ),
+            Result(
+                Title="Favicon Kit",
+                SubTitle=sub_title_string("faviconkit.com"),
+                IcoPath=BROWSER,
+                JsonRPCAction=api.open_url("https://faviconkit.com")
+            ),
+        ])
+    
     def query(self, query: str):
         if query.startswith("extl"):
             return self.external_links(query[4:].strip())
         elif query.startswith("exts"):
             return self.external_search_index(query[4:].strip())
+        elif query.startswith("fav"):
+            return self.external_favicons_check(query[4:].strip())
         else:
             return send_results(results=[
                 Result(
@@ -143,6 +194,11 @@ class OSettingsMenu:
                 Result(
                     Title="s:exts",
                     SubTitle="Внешний поиск" if self.lang == 'ru' else "External Search",
+                    IcoPath=FS_ICO_PATH
+                ),
+                Result(
+                    Title="s:fav",
+                    SubTitle="Все ли иконки на месте" if self.lang == 'ru' else "Are all favicons on place",
                     IcoPath=FS_ICO_PATH
                 ),
                 Result(
@@ -167,3 +223,5 @@ class OSettingsMenu:
             return self.external_search_delete_context(context_data)
         elif "exts_add" in context_data:
             return self.external_search_export_context(context_data)
+        elif "fav" in context_data:
+            return self.external_favicons_context(context_data)

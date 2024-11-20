@@ -14,7 +14,8 @@ logger = logging.getLogger(__name__)
 GLOBAL_DOMAINS = [
     "wikipedia.org",
     "slashlib.me",
-    "readmanga.io"
+    "readmanga.io",
+    "yaoilib.net"
 ]
 
 
@@ -49,7 +50,9 @@ class FaviconManager:
     
     @staticmethod
     def get_fav_path_in_folder(dom: str | httpx.URL, path: str) -> t.Optional[str]:
+        logger.debug(f"{dom} -> {BasicFaviconProvider.simplify_domain(BasicFaviconProvider.get_domain(dom))}")
         fav_path = os.path.join(path, BasicFaviconProvider.simplify_domain(BasicFaviconProvider.get_domain(dom)) + ".png")
+        logger.debug(f"{BasicFaviconProvider.simplify_domain(BasicFaviconProvider.get_domain(dom))} -> {fav_path}")
         if os.path.exists(fav_path):
             return fav_path
     
