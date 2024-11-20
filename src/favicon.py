@@ -15,7 +15,9 @@ GLOBAL_DOMAINS = [
     "wikipedia.org",
     "slashlib.me",
     "readmanga.io",
-    "yaoilib.net"
+    "yaoilib.net",
+    "yaoilib.me",
+    "usagi.one",
 ]
 
 
