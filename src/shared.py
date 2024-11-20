@@ -17,6 +17,7 @@ SETTINGS_TYPE = t.TypedDict('Settings', {
 })
 
 FLOW_PROGRAM_DIRECTORY = os.environ.get("FLOW_PROGRAM_DIRECTORY")
+FL_SETTINGS_FILE = os.path.join(FLOW_PROGRAM_DIRECTORY, "UserData", "Settings", "Settings.json") if FLOW_PROGRAM_DIRECTORY else None
 PLUGIN_SETTINGS_DIRECTORY = os.path.join(FLOW_PROGRAM_DIRECTORY, "UserData", "Settings", "Plugins", "ShikiFlow") if FLOW_PROGRAM_DIRECTORY else None
 SETTINGS_FILE = os.path.join(PLUGIN_SETTINGS_DIRECTORY, "Settings.json") if PLUGIN_SETTINGS_DIRECTORY else None
 OSETTINGS_FILE = os.path.join(PLUGIN_SETTINGS_DIRECTORY, "osettings.json") if PLUGIN_SETTINGS_DIRECTORY else None

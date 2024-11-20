@@ -3,13 +3,13 @@ import re
 import json
 import logging
 
-from pyflowlauncher import Plugin, Result, send_results, api, ResultResponse
+from pyflowlauncher import Plugin, Result, send_results as _send_results, api, ResultResponse
 
-from .osettings_menu import OSettingsMenu
+from .osettings_menu import OSettingsMenu, osettings as _osettings
 from .result import ResultConstructor
 from .graphql_queries import GraphQLQueryConstructor
 from .search import SearchQLClient
-from .shared import FS_ICO_PATH, SETTINGS_TYPE, SETTINGS_FILE
+from .shared import FS_ICO_PATH, SETTINGS_TYPE, SETTINGS_FILE, FL_SETTINGS_FILE
 
 import typing as t
 
@@ -29,6 +29,25 @@ settings = get_settings()
 lang = settings['language'][:2].lower()
 result_constructor = ResultConstructor(settings=settings)
 osettings = OSettingsMenu(lang=lang)
+
+
+if _osettings.first_initial:
+    try:
+        with open(FL_SETTINGS_FILE, mode="r", encoding="utf-8") as f:
+            fl_settings = json.load(f)
+        lang = fl_settings.get("Language")
+        logger.info(f"Found FL lang {lang}")
+        
+        if lang in ("ru", "uk-UA"):
+            def send_results(results: t.Iterable[Result]) -> ResultResponse:
+                return _send_results(results=results, settings={"language": "Russian"})
+        else:
+            send_results = _send_results
+    except Exception as e:
+        logger.warn(f"Got exc {e} while trying to fetch language")
+        send_results = _send_results
+else:
+    send_results = _send_results
 
 
 class SearchTags:

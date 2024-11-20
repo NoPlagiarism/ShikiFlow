@@ -1,4 +1,5 @@
 import os
+import logging
 import json
 
 from pyflowlauncher import Result, ResultResponse
@@ -9,6 +10,7 @@ from .searchterm import title_search
 
 import typing as t
 
+logger = logging.getLogger(__name__)
 
 @dataclass
 class ExtSearch:
@@ -31,6 +33,8 @@ class ExtSearch:
         return cls(**data)
 
 class OSettings:
+    first_initial: bool = False
+    
     def __init__(self, data: t.Optional[dict] = None):
         self._data = data if data else dict()
         self.initialize()
@@ -40,7 +44,8 @@ class OSettings:
             with open(OSETTINGS_FILE, mode="r", encoding="utf-8") as f:
                 self._data = json.load(f)
         except FileNotFoundError:
-            pass
+            logger.info("First init")
+            self.first_initial = True
     
     def save(self):
         with open(OSETTINGS_FILE, mode="w+", encoding="utf-8") as f:
@@ -53,6 +58,9 @@ class OSettings:
             self._data["external_links"] = list()
         if "external_search" not in self._data:
             self._data["external_search"] = list()
+        
+        if self.first_initial:
+            self.save()
     
     @classmethod
     def create_empty(cls):
