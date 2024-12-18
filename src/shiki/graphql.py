@@ -11,9 +11,9 @@ logger = logging.getLogger(__name__)
 
 
 class GraphQLShikiClient(BaseShikiClient):
-    def __init__(self, app_name: str):
+    def __init__(self, app_name: str, **kwargs):
         # Seems like GraphQL does not need auth for now
-        BaseShikiClient.__init__(self, app_name=app_name)
+        BaseShikiClient.__init__(self, app_name=app_name, **kwargs)
     
     def get_raw_data(self, query: str, variables: t.Optional[dict] = None):
         raw_resp = self.post(f"https://{self.DOMAIN}/api/graphql",

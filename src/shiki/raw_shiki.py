@@ -90,18 +90,8 @@ class BaseShikiClient(BaseShikiClass, httpx.Client):
     
     def __init__(self, app_name: str,
                  *,
-                 client_id: t.Optional[str] = None, client_secret: t.Optional[str] = None,
-                 access_token: t.Optional[str] = None, refresh_token: t.Optional[str] = None,
-                 redirect_uri: t.Optional[str] = None):
+                 auth = None):
         self.app_name = app_name
-        
-        if client_id is not None and client_secret is not None:
-            auth = ShikimoriAuthorizationCode(client_id=client_id, client_secret=client_secret,
-                                              app_name=app_name,
-                                              access_token=access_token, refresh_token=refresh_token,
-                                              redirect_uri=redirect_uri)
-        else:
-            auth = None
         
         httpx.Client.__init__(self, auth=auth, headers={"User-Agent": self.app_name})
 

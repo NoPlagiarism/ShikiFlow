@@ -4,7 +4,7 @@ import json
 
 import httpx
 
-from .shared import PLUGIN_CACHE_FOLDER
+from .shared import PLUGIN_CACHE_FOLDER, APP_NAME
 
 ANMA_URL = r"https://cdn.jsdelivr.net/gh/NoPlagiarism/AnMaSearchTerms@master/all.min.json"
 ANMA_CACHE_FILE = os.path.join(PLUGIN_CACHE_FOLDER, "anma_data.json") if PLUGIN_CACHE_FOLDER else None
@@ -39,7 +39,7 @@ def get_anma_data():
     if check_cache():
         return load_cache()
     
-    resp = httpx.get(ANMA_URL, headers={"User-Agent": "ShikiFlow"})
+    resp = httpx.get(ANMA_URL, headers={"User-Agent": APP_NAME})
     data = resp.json()
     
     # Cache

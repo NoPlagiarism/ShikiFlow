@@ -1,6 +1,7 @@
 import os
 from itertools import chain
 import logging
+import json
 
 from httpx import URL
 
@@ -11,6 +12,7 @@ from pyflowlauncher.icons import FOLDER, BROWSER
 from .anma_data import get_anma_data
 from .osettings import osettings, ExtSearch
 from .shared import FS_ICO_PATH, PLUGIN_ID, PLUGIN_SETTINGS_DIRECTORY, FAVICON_FOLDER_ROOT, FAVICON_FOLDER_CUSTOM
+from .nopla_auth import NoplagiAuth
 from .favicon import FaviconManager
 from .shiki.types import MediaEntry
 
@@ -177,6 +179,21 @@ class OSettingsMenu:
             ),
         ])
     
+    def auth(self, query: str):
+        if len(query) > 10:
+            try:
+                data = json.loads(query)
+                if NoplagiAuth.check_data(data):
+                    NoplagiAuth.save_data(data=data)
+                return send_results(results=[Result(Title="Данные для авторизации сохранены", IcoPath=FS_ICO_PATH)])
+            except:
+                return self.auth("")
+        return send_results(results=[
+            Result(Title="Авторизоваться",
+                   IcoPath=FS_ICO_PATH,
+                   JsonRPCAction=api.open_url(NoplagiAuth.get_start_url(additional_data={"keyword": "shk"})))  #TODO: get current keyword
+        ])
+    
     def query(self, query: str):
         if query.startswith("extl"):
             return self.external_links(query[4:].strip())
@@ -184,6 +201,8 @@ class OSettingsMenu:
             return self.external_search_index(query[4:].strip())
         elif query.startswith("fav"):
             return self.external_favicons_check(query[4:].strip())
+        elif query.startswith("auth"):
+            return self.auth(query[4:].strip())
         else:
             return send_results(results=[
                 Result(
