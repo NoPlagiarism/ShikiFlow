@@ -11,6 +11,7 @@ from .graphql_queries import GraphQLQueryConstructor
 from .search import SearchQLClient
 from .shared import FS_ICO_PATH, SETTINGS_TYPE, SETTINGS_FILE, FL_SETTINGS_FILE, APP_NAME
 from .nopla_auth import NoplagiAuth
+from .fl_settings import FLSettings
 
 import typing as t
 
@@ -34,10 +35,11 @@ osettings = OSettingsMenu(lang=lang)
 
 if _osettings.first_initial:
     try:
-        with open(FL_SETTINGS_FILE, mode="r", encoding="utf-8") as f:
-            fl_settings = json.load(f)
-        lang = fl_settings.get("Language")
+        settings = FLSettings()
+        lang = settings.language
         logger.info(f"Found FL lang {lang}")
+        if lang is None:
+            raise TypeError("language is None")
         
         if lang in ("ru", "uk-UA"):
             def send_results(results: t.Iterable[Result]) -> ResultResponse:

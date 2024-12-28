@@ -15,6 +15,7 @@ from .shared import FS_ICO_PATH, PLUGIN_ID, PLUGIN_SETTINGS_DIRECTORY, FAVICON_F
 from .nopla_auth import NoplagiAuth
 from .favicon import FaviconManager
 from .shiki.types import MediaEntry
+from .fl_settings import FLSettings
 
 import typing as t
 
@@ -28,9 +29,16 @@ class FalseMatchData:
 
 class OSettingsMenu:
     fav_man = FaviconManager([FAVICON_FOLDER_CUSTOM, FAVICON_FOLDER_ROOT])
+    _fls: t.Optional[FLSettings] = None
     
     def __init__(self, lang: t.Literal['ru', 'en'] = 'ru'):
         self.lang = lang
+    
+    @property
+    def fls(self) -> FLSettings:
+        if self._fls is None:
+            self._fls = FLSettings()
+        return self._fls
     
     @classmethod
     def external_links(cls, query: str):
@@ -188,10 +196,12 @@ class OSettingsMenu:
                 return send_results(results=[Result(Title="Данные для авторизации сохранены", IcoPath=FS_ICO_PATH)])
             except:
                 return self.auth("")
+        start_url = NoplagiAuth.get_start_url(additional_data={"keyword": self.fls.get_plugin_action_keywords(PLUGIN_ID)[0]})
         return send_results(results=[
             Result(Title="Авторизоваться",
                    IcoPath=FS_ICO_PATH,
-                   JsonRPCAction=api.open_url(NoplagiAuth.get_start_url(additional_data={"keyword": "shk"})))  #TODO: get current keyword
+                   JsonRPCAction=api.open_url(start_url),
+                   CopyText=start_url)
         ])
     
     def query(self, query: str):
