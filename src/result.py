@@ -108,6 +108,8 @@ class ResultConstructor:
         }
     }
     
+    
+    
     def __init__(self, settings: SETTINGS_TYPE, lang: t.Optional[t.Literal['ru', 'en']] = None):
         self.settings = settings
         if lang:
@@ -179,7 +181,8 @@ class ResultConstructor:
         result = Result(
             Title=self.get_preferable_title_from_chosen(anime),
             SubTitle=f"{ {'ru': 'Тип', 'en': 'Format'}[self.lang]}: {self.ANIME_KINDS[self.lang].get(anime.kind, f'N/A [' + {'ru': 'Аниме', 'en': 'Anime' }[self.lang] + ']')} | { {'ru': 'Статус', 'en': 'Status'}[self.lang] }: {self.ANIME_STATUSES[self.lang].get(anime.status, 'N/A')}\n" +\
-                (f"{ {'ru': 'Эпизодов', 'en': 'Episodes'}[self.lang] }: {episodes}" if episodes else "") + ((f" | { {'ru': 'Сезон', 'en': 'Season' }[self.lang] }: {self.from_season_string_with_current(anime.season)}") if anime.season else ""),
+                (f"{ {'ru': 'Эпизодов', 'en': 'Episodes'}[self.lang] }: {episodes}" if episodes else "") + ((f" | { {'ru': 'Сезон', 'en': 'Season' }[self.lang] }: {self.from_season_string_with_current(anime.season)}") if anime.season else "") +\
+                    "\ncheck",
             IcoPath=anime.icon_url,
             ContextData=anime.raw_dict,
             JsonRPCAction=api.open_url(url) if url else api.copy_to_clipboard(self.get_preferable_title_from_chosen(anime))

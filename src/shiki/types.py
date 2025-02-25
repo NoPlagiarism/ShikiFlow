@@ -184,3 +184,20 @@ class MangaEntry(MediaEntry):
     status: t.Optional[MangaStatusEnum] = None
     chapters: t.Optional[int] = None
     volumes: t.Optional[int] = None
+
+class MyListString(_SimpleStrEnum):
+    PLANNED = "planned"
+    WATCHING = "watching"
+    REWATCHING = "rewatching"
+    COMPLETED = "completed"
+    ON_HOLD = "on_hold"
+    DROPPED = "dropped"
+
+class UserRate:
+    id_: int
+    volumes: int
+    chapters: int
+    episodes: int
+    rewatches: int
+    score: int
+    status: MyListString

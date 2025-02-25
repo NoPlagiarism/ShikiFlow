@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 class GraphQLShikiClient(BaseShikiClient):
     def __init__(self, app_name: str, **kwargs):
-        # Seems like GraphQL does not need auth for now
+        # Seems like GraphQL does not require auth for now
         BaseShikiClient.__init__(self, app_name=app_name, **kwargs)
     
     def get_raw_data(self, query: str, variables: t.Optional[dict] = None):
@@ -23,8 +23,9 @@ class GraphQLShikiClient(BaseShikiClient):
         return resp
     
     def get_data(self, query: str, variables: t.Optional[dict] = None):
+        logger.debug(f"GraphQL query: {query}")
         data = self.get_raw_data(query=query, variables=variables)
-        logger.debug(json.dumps(data, ensure_ascii=False))
+        logger.debug(f"GraphQL response: {json.dumps(data, ensure_ascii=False)}")
         return self.parse_data(data)
     
     @classmethod

@@ -7,7 +7,6 @@ from pyflowlauncher import Plugin, Result, send_results as _send_results, api, R
 
 from .osettings_menu import OSettingsMenu, osettings as _osettings
 from .result import ResultConstructor
-from .graphql_queries import GraphQLQueryConstructor
 from .search import SearchQLClient
 from .shared import FS_ICO_PATH, SETTINGS_TYPE, SETTINGS_FILE, FL_SETTINGS_FILE, APP_NAME
 from .nopla_auth import NoplagiAuth
@@ -26,7 +25,7 @@ def get_settings():
     with open(SETTINGS_FILE, mode="r", encoding="utf-8") as f:
         return json.load(f)
 
-client = SearchQLClient(APP_NAME, auth=NoplagiAuth())
+client = SearchQLClient(APP_NAME, auth=NoplagiAuth(), return_user_rates=True)  # TODO: use settings for user rates
 settings = get_settings()
 lang = settings['language'][:2].lower()
 result_constructor = ResultConstructor(settings=settings)
