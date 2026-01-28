@@ -102,7 +102,7 @@ class MediaEntryFromGraph(MediaEntry):
     def url(self) -> t.Optional[str]:
         if "url" in self._data:
             return self._data["url"]
-        return f"https://shikimori.one/{self.type_.lower()}s/{self.id_}"
+        return f"https://shiki.one/{self.type_.lower()}s/{self.id_}"
     
     @property
     def aired_on(self) -> t.Optional[date]:
@@ -129,7 +129,14 @@ class MediaEntryFromGraph(MediaEntry):
     
     @property
     def icon_url(self) -> t.Optional[str]:
-        return self._try_value(("poster", "previewUrl"))
+        url = self._try_value(("poster", "previewUrl"))
+        if not url:
+            return
+        # Trying to mirror
+        if BaseShikiClient.DOMAIN not in url:
+            if "shikimori.one" in url:
+                url = url.replace("shikimori.one", BaseShikiClient.DOMAIN)
+        return url
     
     @classmethod
     def from_raw_dict(cls, raw_dict):

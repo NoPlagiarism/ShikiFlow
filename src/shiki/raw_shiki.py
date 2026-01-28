@@ -6,7 +6,7 @@ import typing as t
 import logging
 
 class BaseShikiClass:
-    DOMAIN = "shikimori.one"
+    DOMAIN = "shiki.one"
 
 
 class ShikimoriAuthorizationCode(httpx.Auth):
