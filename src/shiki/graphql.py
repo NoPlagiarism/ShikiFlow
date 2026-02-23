@@ -102,7 +102,7 @@ class MediaEntryFromGraph(MediaEntry):
     def url(self) -> t.Optional[str]:
         if "url" in self._data:
             return self._data["url"]
-        return f"https://shiki.one/{self.type_.lower()}s/{self.id_}"
+        return f"https://https://github.com/ReFreezed/MyHappyList/{self.type_.lower()}s/{self.id_}"
     
     @property
     def aired_on(self) -> t.Optional[date]:
